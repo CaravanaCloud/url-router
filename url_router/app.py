@@ -4,15 +4,11 @@ import json
 
 
 def lambda_handler(event, context):
-    print(event);
-    response = lookup(event);
-    return response;
+    print(event)
+    response = lookup(event)
+    return response
 
 def lookup(event):
-    def lambda_handler(event, context):
-
-    # Generate HTTP redirect response with 302 status code and Location header.
-
     response = {
         'status': '302',
         'statusDescription': 'Found',
