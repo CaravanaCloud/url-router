@@ -1,0 +1,46 @@
+# gitpod.io/#github.com/CaravanaCloud/red-pod
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Welcome
+    init: |
+      echo "Init okd-pod at $(date)"
+    command: echo "Hello red-pod :)"
+
+ports:
+  - port: 3300
+    onOpen: ignore
+    visibility: public
+
+  - port: 3306
+    onOpen: ignore
+    visibility: public
+
+  - port: 5000
+    onOpen: ignore
+    visibility: public
+
+  - port: 5005
+    onOpen: ignore
+    visibility: public
+
+  - port: 8080
+    onOpen: ignore
+    visibility: public
+
+  - port: 8081
+    onOpen: open-browser
+    visibility: public
+
+  - port: 8888
+    onOpen: ignore
+    visibility: public
+
+vscode:
+  extensions:
+    - ms-azuretools.vscode-docker
+    - ms-python.python
+    - ms-toolsai.jupyter
+    - esbenp.prettier-vscode
+
