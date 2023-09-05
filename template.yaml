@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  url-router
+
+  Sample SAM Template for url-router
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+  URLRouterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: url_router/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Architectures:
+        - x86_64
+
+Outputs:
+  URLRouterFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt URLRouterFunction.Arn
+
+  URLRouterFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt URLRouterFunctionRole.Arn
