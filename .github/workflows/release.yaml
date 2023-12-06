@@ -23,6 +23,6 @@ jobs:
     - name: Deploy to AWS CloudFormation
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
-        stack-name: url-router-github
+        name: url-router-github
         template: infrastructure.cfn.yaml
 
