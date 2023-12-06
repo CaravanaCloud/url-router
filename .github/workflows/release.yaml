@@ -29,4 +29,5 @@ jobs:
       with:
         name: url-router-github
         template: infrastructure.cfn.yaml
+        no-fail-on-empty-changeset: "1"
 
