@@ -25,9 +25,6 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Deploy to AWS CloudFormation
-      uses: aws-actions/aws-cloudformation-github-deploy@v1
-      with:
-        name: url-router-github
-        template: infrastructure.cfn.yaml
-        no-fail-on-empty-changeset: "1"
+      run: aws cloudformation deploy --template-file infrastructure.cfn.yaml --stack-name  url-router-github --capabilities CAPABILITY_IAM
+
 
