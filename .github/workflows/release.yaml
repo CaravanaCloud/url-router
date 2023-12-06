@@ -25,8 +25,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Deploy to AWS CloudFormation
-      run: |
-        aws cloudformation deploy \
+      run: aws cloudformation deploy \
           --template-file infrastructure.cfn.yaml \
           --stack-name  url-router-github \
           --capabilities CAPABILITY_IAM
