@@ -26,5 +26,8 @@ jobs:
 
     - name: Deploy to AWS CloudFormation
       run: |
-        aws cloudformation deploy --template-file infrastructure.cfn.yaml --stack-name  url-router-github --capabilities CAPABILITY_IAM
+        aws cloudformation deploy \
+          --template-file infrastructure.cfn.yaml \
+          --stack-name  url-router-github \
+          --capabilities CAPABILITY_IAM
 
