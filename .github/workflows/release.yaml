@@ -1,6 +1,7 @@
 name: Deploy to AWS CloudFormation
 
 on:
+  workflow_dispatch: {}
   push:
     branches:
       - release
