@@ -28,6 +28,6 @@ jobs:
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
         name: url-router-github
-        template: https://raw.githubusercontent.com/CaravanaCloud/url-router/main/infrastructure.cfn.yaml
+        template: infrastructure.cfn.yaml
         no-fail-on-empty-changeset: "1"
 
