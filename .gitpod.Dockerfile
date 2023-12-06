@@ -5,6 +5,7 @@ FROM gitpod/workspace-full
 RUN bash -c "sudo apt-get update"
 RUN bash -c "sudo pip install --upgrade pip"
 
+
 # AWS CLIs
 RUN bash -c "curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip' && unzip awscliv2.zip \
     && sudo ./aws/install \
@@ -19,6 +20,8 @@ RUN bash -c "curl -Ls '${SAM_URL}' -o '/tmp/aws-sam-cli-linux-x86_64.zip' \
     && unzip '/tmp/aws-sam-cli-linux-x86_64.zip' -d '/tmp/sam-installation' \
     && sudo '/tmp/sam-installation/install' \
     && sam --version"
+
+RUN bash -c "pip3 install cfn-lint"
 
 # Done :)
 RUN bash -c "echo 'done.'"

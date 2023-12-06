@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Simple URL router
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+
+Parameters:
+  DomainName:
+    Type: String
+    Description: "The domain name of website"
+  HostedZoneId:
+    Type: String
+    Description: "The Route53 hosted zone ID used for the domain"
+  AcmCertificateArn:
+    Type: String
+    Description: "The certificate arn for the domain name provided"
+  IndexDocument:
+    Type: String
+    Description: "The index document"
+    Default: "index.html"
+  ErrorDocument:
+    Type: String
+    Description: "The error document, ignored in SPA mode"
+    Default: "404.html"
+  RewriteMode:
+    Type: String
+    Description: "The request rewrite behaviour type"
+    Default: "STATIC"
+    AllowedValues:
+      - STATIC
+      - SPA
+  CloudFrontPriceClass:
+    Type: String
+    Description: "The price class for CloudFront distribution"
+    Default: "PriceClass_All"
+    AllowedValues:
+      - PriceClass_100
+      - PriceClass_200
+      - PriceClass_All
+
+Resources:
+   RewriteRequestStaticFunction:
+    Type: AWS::CloudFront::Function
+    Properties: 
+      Name: !Sub "${AWS::StackName}-cft-fn"
+      AutoPublish: true
+      FunctionCode: !Sub |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri
+          if (uri.endsWith('/')) {
+              request.uri += '${IndexDocument}';
+          } else if (!uri.includes('.')) {
+              request.uri += '/${IndexDocument}';
+          }
+          return request;
+        }
+      FunctionConfig: 
+        Comment: !Sub "rewrite all paths to /${IndexDocument}"
+        Runtime: cloudfront-js-1.0
+
+  URLRouterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: url_router/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Architectures:
+        - x86_64
+
+Outputs:
+  URLRouterFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt URLRouterFunction.Arn
+
+  URLRouterFunctionIamRole:
+    Description: "Implicit IAM Role created for function"
+    Value: !GetAtt URLRouterFunctionRole.Arn

@@ -1,37 +1,46 @@
-version = "0.0.1"
+import logging
+import json
 
-caravana = {
-    "": "https://github.com/sponsors/CaravanaCloud",
-    "aws": "https://aws.amazon.com"
+version = "0.0.3"
+
+data = {
+    "caravana.cloud/": "https://github.com/sponsors/CaravanaCloud",
+    "caravana.cloud/aws": "https://aws.amazon.com",
+    "redhacks.net": "https://dev.to/redhacks/mentorship-group-mdj",
+    "redhacks.net/google": "https://google.com",
+    "well-architected.info": "https://aws.amazon.com/architecture/well-architected/"
 }
 
-redhacks = {
-    "": "https://dev.to/redhacks/mentorship-group-mdj",
-    "google": "https://google.com"
-}
+logging.basicConfig(level=100)
+log = logging.getLogger()
 
-domains = {
-    "caravana.cloud": caravana,
-    "redhacks.net": redhacks
-}
-
+def debug(message, *args):
+    # log.debug(message, *args)
+    print(message, *args)
+    
 def lambda_handler(event, context):
-    # print(event)
+    debug("lambda_handler()")
+    debug(json.dumps(event, indent=4))
     response = lookup(event)
     return response
 
+def keyOf(domain, path):
+    return domain + path
+
+def lookup_kvs(key):
+    return None
+
+def lookup_dict(key):
+    return data.get(key)
+
 def lookup(event):
     mvh = event.get("multiValueHeaders")
-    host = mvh.get("host")[0]
+    host = mvh.get("host")[0] if mvh else None
     (domainPrefix, domainName) = split_host(host)
-    path = event.get("path")
+    path = event.get("path","")
     query = event.get("queryStringParameters")
-
-    if (path.startswith("/")):
-        path = path[1:]
-    
-    domain = domains.get(domainName) 
-    location = domain.get(path) if domain else None
+    key = keyOf(domainName, path)
+    location = lookup_kvs(key) or lookup_dict(key)
     headers = {
                 'Content-Type': 'text/plain',
                 'x-url-router-domainName': domainName,
@@ -63,7 +72,8 @@ def lookup(event):
             'isBase64Encoded': False,
             'body': 'Not found '+path
         }
-    # print(response)
+    debug("--- response ---")
+    debug(json.dumps(response, indent=4))
     return response
 
 def split_host(host):
